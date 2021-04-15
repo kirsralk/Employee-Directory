@@ -1,158 +1,75 @@
-  
-import React from 'react';
-import styled from 'styled-components';
-import { useTable, useSortBy } from 'react-table';
-import axios from "axios";
-// import API from '../'
+import React, { useState } from "react";
+import { useTable, useFilters, useSortBy } from "react-table";
 
-import makeData from './makeData';
-
-// function getRandom() {
-//     return axios.get("https://randomuser.me/api/?results=200&nat=us");
-// }
-
-const Styles = styled.div`
-  padding: 1rem;
-  table {
-    border-spacing: 0;
-    border: 1px solid black;
-    tr {
-      :last-child {
-        td {
-          border-bottom: 0;
-        }
-      }
-    }
-    th,
-    td {
-      margin: 0;
-      padding: 0.5rem;
-      border-bottom: 1px solid black;
-      border-right: 1px solid black;
-      :last-child {
-        border-right: 0;
-      }
-    }
-  }
-`
-
-function Table({ columns, data }) {
+export default function Table({ columns, data }) {
+  const [filterInput, setFilterInput] = useState("");
+  // Use the state and functions returned from useTable to build your UI
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
     rows,
     prepareRow,
+    setFilter
   } = useTable(
     {
       columns,
-      data,
+      data
     },
+    useFilters,
     useSortBy
-  )
+  );
 
-  // We don't want to render all 2000 rows for this example, so cap
-  // it at 20 for this use case
-  const firstPageRows = rows.slice(0, 20)
+  const handleFilterChange = e => {
+    const value = e.target.value || undefined;
+    setFilter("show.name", value);
+    setFilterInput(value);
+  };
 
+  // Render the UI for your table
   return (
     <>
+      <input
+        value={filterInput}
+        onChange={handleFilterChange}
+        placeholder={"Search name"}
+      />
       <table {...getTableProps()}>
         <thead>
           {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map(column => (
-                // Add the sorting props to control sorting. For this example
-                // we can add them into the header props
-                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                  {column.render('Header')}
-                  {/* Add a sort direction indicator */}
-                  <span>
-                    {column.isSorted
+                <th
+                  {...column.getHeaderProps(column.getSortByToggleProps())}
+                  className={
+                    column.isSorted
                       ? column.isSortedDesc
-                        ? ' 🔽'
-                        : ' 🔼'
-                      : ''}
-                  </span>
+                        ? "sort-desc"
+                        : "sort-asc"
+                      : ""
+                  }
+                >
+                  {column.render("Header")}
                 </th>
               ))}
             </tr>
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {firstPageRows.map(
-            (row, i) => {
-              prepareRow(row);
-              return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map(cell => {
-                    return (
-                      <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                    )
-                  })}
-                </tr>
-              )}
-          )}
+          {rows.map((row, i) => {
+            prepareRow(row);
+            return (
+              <tr {...row.getRowProps()}>
+                {row.cells.map(cell => {
+                  return (
+                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                  );
+                })}
+              </tr>
+            );
+          })}
         </tbody>
       </table>
-      <br />
-      <div>Showing the first 20 results of {rows.length} rows</div>
     </>
-  )
+  );
 }
-
-function TableApp() {
-  const columns = React.useMemo(
-    () => [
-        {
-        Header: 'Employee',
-        columns: [
-          {
-                Header: 'Image',
-                accessor: 'img',
-          }, 
-          {
-            Header: 'First Name',
-            accessor: 'firstName',
-          },
-          {
-            Header: 'Last Name',
-            accessor: 'lastName',
-          },
-        ],
-      },
-      {
-        Header: 'Info',
-        columns: [
-          {
-            Header: 'Age',
-            accessor: 'age',
-          },
-          {
-            Header: 'Visits',
-            accessor: 'visits',
-          },
-          {
-            Header: 'Status',
-            accessor: 'status',
-          },
-          {
-            Header: 'Profile Progress',
-            accessor: 'progress',
-          },
-        ],
-      },
-    ],
-    []
-  )
-
-  const data = React.useMemo(() => makeData(200), [])
-
-  return (
-    <Styles>
-      <Table columns={columns} data={data} />
-    </Styles>
-  )
-}
-
-export default TableApp;
