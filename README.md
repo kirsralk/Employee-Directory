@@ -6,7 +6,7 @@ Employee Directory provides a clean and sortable table of randomly generated "em
 
 * [Github Repository](https://github.com/kirsralk/Employee-Directory).  
 * [Deployed Version](https://kirsralk.github.io/Employee-Directory).  
-* App Screenshot:
+* App Screenshot:  
 ![App Screenshot](screenshot.png)
 
 ### User Story
