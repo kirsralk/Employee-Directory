@@ -1,9 +1,15 @@
   
-import React from 'react'
-import styled from 'styled-components'
-import { useTable, useSortBy } from 'react-table'
+import React from 'react';
+import styled from 'styled-components';
+import { useTable, useSortBy } from 'react-table';
+import axios from "axios";
+// import API from '../'
 
-import makeData from './makeData'
+import makeData from './makeData';
+
+// function getRandom() {
+//     return axios.get("https://randomuser.me/api/?results=200&nat=us");
+// }
 
 const Styles = styled.div`
   padding: 1rem;
@@ -98,9 +104,13 @@ function Table({ columns, data }) {
 function TableApp() {
   const columns = React.useMemo(
     () => [
-      {
-        Header: 'Name',
+        {
+        Header: 'Employee',
         columns: [
+          {
+                Header: 'Image',
+                accessor: 'img',
+          }, 
           {
             Header: 'First Name',
             accessor: 'firstName',
@@ -136,7 +146,7 @@ function TableApp() {
     []
   )
 
-  const data = React.useMemo(() => makeData(2000), [])
+  const data = React.useMemo(() => makeData(200), [])
 
   return (
     <Styles>
