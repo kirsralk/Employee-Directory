@@ -1,24 +1,26 @@
 // import axios from "axios";
 
-// export default {
-//     getRandom: function() {
-//         return axios.get("https://randomuser.me/api/?results=200&nat=us");
-//     }
+// const BASEURL = "https://randomuser.me/api/?results=200&nat=us";
 
+
+// // Export an object with a "search" method that searches the Giphy API for the passed query
+// export default {
+//   get: function () {
+//     return axios.get(BASEURL);
+//   }
 // };
+
+/* eslint-disable no-unreachable */
+/* eslint-disable import/no-anonymous-default-export */
 
 import axios from "axios";
 
-// Export an object containing methods we'll use for accessing the Dog.Ceo API
+ 
+// Export an object containing methods we'll use for accessing the random user API
 
-export default {
-  getRandomDog: function() {
-    return axios.get("https://dog.ceo/api/breeds/image/random");
-  },
-  getDogsOfBreed: function(breed) {
-    return axios.get("https://dog.ceo/api/breed/" + breed + "/images");
-  },
-  getBaseBreedsList: function() {
-    return axios.get("https://dog.ceo/api/breeds/list");
-  }
+export default{ 
+    getEmployees:function(){    
+
+        return axios.get("https://randomuser.me/api/?results=200&nat=us");
+    }
 };
